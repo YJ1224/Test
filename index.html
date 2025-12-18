@@ -46,23 +46,41 @@ h2 { margin-bottom: 10px; }
   box-shadow: 0 8px 14px rgba(0,0,0,0.25);
 }
 
+/* 버튼 영역 */
 .controls {
   margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
 button {
-  width: 200px;
-  font-size: 22px;
-  padding: 14px;
+  flex: 1;
+  max-width: 120px;
+  font-size: 16px;
+  padding: 14px 6px;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(135deg, #6c5ce7, #0984e3);
-  color: #fff;
   cursor: pointer;
+  color: #fff;
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
-button:active { transform: scale(0.97); }
+.btn-random {
+  background: linear-gradient(135deg, #00b894, #55efc4);
+}
+
+.btn-selected {
+  background: linear-gradient(135deg, #6c5ce7, #0984e3);
+}
+
+.btn-reset {
+  background: #636e72;
+}
+
+button:active {
+  transform: scale(0.97);
+}
 
 .result-card {
   margin: 25px auto 0;
@@ -94,12 +112,14 @@ button:active { transform: scale(0.97); }
 <body>
 
 <h2>🎱 로또 번호 뽑기</h2>
-<div class="sub">숫자를 선택한 뒤 6개를 뽑으세요</div>
+<div class="sub">번호를 선택하거나 랜덤으로 뽑으세요</div>
 
 <div class="numbers" id="numbers"></div>
 
 <div class="controls">
-  <button onclick="draw()">6개 뽑기</button>
+  <button class="btn-random" onclick="randomDraw()">랜덤 추첨</button>
+  <button class="btn-selected" onclick="selectedDraw()">선택 추첨</button>
+  <button class="btn-reset" onclick="resetAll()">초기화</button>
 </div>
 
 <div class="result-card" id="result" style="display:none;"></div>
@@ -109,6 +129,7 @@ const selected = new Set();
 const container = document.getElementById('numbers');
 const resultDiv = document.getElementById('result');
 
+// 번호 생성
 for (let i = 1; i <= 45; i++) {
   const div = document.createElement('div');
   div.className = 'ball';
@@ -127,29 +148,56 @@ for (let i = 1; i <= 45; i++) {
   container.appendChild(div);
 }
 
-function draw() {
+// 결과 출력
+function showResult(nums) {
+  nums.sort((a, b) => a - b);
+
+  resultDiv.innerHTML =
+    '<h3>결과</h3>' +
+    '<div class="result-line">' +
+    nums.map(n => `<span class="result-ball">${n}</span>`).join('') +
+    '</div>';
+
+  resultDiv.style.display = 'block';
+}
+
+// 1️⃣ 전체 랜덤
+function randomDraw() {
+  const nums = [];
+  while (nums.length < 6) {
+    const n = Math.floor(Math.random() * 45) + 1;
+    if (!nums.includes(n)) nums.push(n);
+  }
+  showResult(nums);
+}
+
+// 2️⃣ 선택 랜덤
+function selectedDraw() {
   if (selected.size < 6) {
     alert('최소 6개 이상 선택하세요');
     return;
   }
 
   const arr = Array.from(selected);
-  const result = [];
+  const nums = [];
 
-  while (result.length < 6) {
+  while (nums.length < 6) {
     const n = arr[Math.floor(Math.random() * arr.length)];
-    if (!result.includes(n)) result.push(n);
+    if (!nums.includes(n)) nums.push(n);
   }
+  showResult(nums);
+}
 
-  result.sort((a, b) => a - b);
+// 3️⃣ 초기화
+function resetAll() {
+  selected.clear();
 
-  resultDiv.innerHTML =
-    '<h3>결과</h3>' +
-    '<div class="result-line">' +
-    result.map(n => `<span class="result-ball">${n}</span>`).join('') +
-    '</div>';
+  document.querySelectorAll('.ball').forEach(ball => {
+    ball.classList.remove('selected');
+  });
 
-  resultDiv.style.display = 'block';
+  resultDiv.style.display = 'none';
+  resultDiv.innerHTML = '';
 }
 </script>
 
