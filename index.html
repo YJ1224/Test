@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>로또 뽑기</title>
+<link rel="manifest" href="manifest.json">
+
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f5f6fa;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h2 { margin-bottom: 10px; }
+.sub { color: #666; margin-bottom: 20px; }
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.ball {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle at top left, #ffffff, #dcdde1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  line-height: 56px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ball.selected {
+  background: radial-gradient(circle at top left, #ffd93d, #f39c12);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 14px rgba(0,0,0,0.25);
+}
+
+.controls {
+  margin-top: 25px;
+}
+
+button {
+  width: 200px;
+  font-size: 22px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6c5ce7, #0984e3);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+button:active { transform: scale(0.97); }
+
+.result-card {
+  margin: 25px auto 0;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.result-line {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.result-ball {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at top left, #ffeaa7, #fdcb6e);
+  line-height: 48px;
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🎱 로또 번호 뽑기</h2>
+<div class="sub">숫자를 선택한 뒤 6개를 뽑으세요</div>
+
+<div class="numbers" id="numbers"></div>
+
+<div class="controls">
+  <button onclick="draw()">6개 뽑기</button>
+</div>
+
+<div class="result-card" id="result" style="display:none;"></div>
+
+<script>
+const selected = new Set();
+const container = document.getElementById('numbers');
+const resultDiv = document.getElementById('result');
+
+for (let i = 1; i <= 45; i++) {
+  const div = document.createElement('div');
+  div.className = 'ball';
+  div.innerText = i;
+
+  div.onclick = () => {
+    if (selected.has(i)) {
+      selected.delete(i);
+      div.classList.remove('selected');
+    } else {
+      selected.add(i);
+      div.classList.add('selected');
+    }
+  };
+
+  container.appendChild(div);
+}
+
+function draw() {
+  if (selected.size < 6) {
+    alert('최소 6개 이상 선택하세요');
+    return;
+  }
+
+  const arr = Array.from(selected);
+  const result = [];
+
+  while (result.length < 6) {
+    const n = arr[Math.floor(Math.random() * arr.length)];
+    if (!result.includes(n)) result.push(n);
+  }
+
+  result.sort((a, b) => a - b);
+
+  resultDiv.innerHTML =
+    '<h3>결과</h3>' +
+    '<div class="result-line">' +
+    result.map(n => `<span class="result-ball">${n}</span>`).join('') +
+    '</div>';
+
+  resultDiv.style.display = 'block';
+}
+</script>
+
+</body>
+</html>
