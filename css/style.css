@@ -1,0 +1,114 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f5f6fa;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h2 { margin-bottom: 10px; }
+.sub { color: #666; margin-bottom: 20px; }
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.ball {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle at top left, #ffffff, #dcdde1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  line-height: 56px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ball.selected {
+  background: radial-gradient(circle at top left, #ffd93d, #f39c12);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 14px rgba(0,0,0,0.25);
+}
+
+/* 버튼 영역 */
+.controls {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  max-width: 120px;
+  font-size: 16px;
+  padding: 14px 6px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.btn-random {
+  background-color: #f1c40f;   /* 로또 공 노랑 */
+  color: #2d3436;
+}
+
+/* 로또 파랑 - 선택 */
+.btn-selected {
+  background-color: #0057b8;   /* 동행복권 느낌 파랑 */
+}
+
+/* 중립 회색 - 초기화 */
+.btn-reset {
+  background-color: #7f8c8d;
+}
+button:active {
+  transform: scale(0.97);
+}
+
+.result-card {
+  margin: 25px auto 0;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.result-line {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.result-ball {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 17px;
+  font-weight: 700;
+  color: #2d3436;
+
+  background-color: #f1c40f;  /* 기본 노랑 */
+  border: 2px solid #e0b90f;  /* 테두리로 입체감 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+}
+
+.ball-yellow { background-color: #f1c40f; border-color: #e0b90f; }
+.ball-blue   { background-color: #3498db; border-color: #2e86c1; color:#fff; }
+.ball-red    { background-color: #e74c3c; border-color: #cb4335; color:#fff; }
+.ball-gray   { background-color: #95a5a6; border-color: #7f8c8d; }
+.ball-green  { background-color: #2ecc71; border-color: #27ae60; }
